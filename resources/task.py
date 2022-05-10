@@ -1,9 +1,6 @@
-from flask import request
 from flask_restful import Resource,reqparse
 
 from models.task import TaskModel
-
-import sqlite3
 
 class Task(Resource):
 
@@ -61,15 +58,5 @@ class Task(Resource):
 
 class Tasks(Resource):
     def get(self):
-        connection=sqlite3.connect('data.db')
-        cursor=connection.cursor()
 
-        query="SELECT * FROM tasks"
-        result=cursor.execute(query)
-        tasks=[]
-        for row in result:
-            tasks.append({'id':row[0],'name':row[1]})
-       
-        connection.close()
-
-        return {'tasks':tasks},200
+        return {'tasks':[task.json() for task in TaskModel.query.all()]},200
