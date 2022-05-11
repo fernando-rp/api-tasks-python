@@ -10,6 +10,9 @@ app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 api= Api(app)
  
+@app.before_first_request
+def create_tables():
+    db.create_all()
 
 api.add_resource(Task, '/task/<string:name>')
 api.add_resource(Tasks, '/tasks')
